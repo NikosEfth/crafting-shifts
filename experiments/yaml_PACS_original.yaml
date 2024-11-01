@@ -1,0 +1,51 @@
+io_var:
+  run_name: original-only_training
+  dataset: PACS
+geometric_transforms:
+  train:
+    - name: random_resized_crop
+      size: [224, 224]
+      scale: [0.8, 1.0]
+      ratio: [0.75, 1.3333333333333333]
+    - name: random_horizontal_flip
+      p: 0.5
+  val:
+    - name: resize
+      size: 224
+    - name: center_crop
+      size: 224
+  test:
+    - name: resize
+      size: 224
+    - name: center_crop
+      size: 224
+  val_only:
+    - name: resize
+      size: 224
+pseudo_domains:
+  - name: normal
+    dir: [Original]
+    train_transforms:
+      - name: to_tensor
+      - name: normalize
+        mean: [0.485, 0.456, 0.406]
+        std: [0.229, 0.224, 0.225]
+    val_transforms:
+      - name: to_tensor
+      - name: normalize
+        mean: [0.485, 0.456, 0.406]
+        std: [0.229, 0.224, 0.225]
+    test_transforms:
+      - name: to_tensor
+      - name: normalize
+        mean: [0.485, 0.456, 0.406]
+        std: [0.229, 0.224, 0.225]
+val_only_pseudo_domains:
+  - pseudo_number: 1
+    name: [Imgaug_geometric, Imgaug_arithmetic, Imgaug_artistic, Imgaug_blur, Imgaug_color, Imgaug_contrast, Imgaug_convolutional, Imgaug_edges, Imgaug_segmentation, Imgaug_weather]
+    dir_1: [Imgaug_geometric, Imgaug_arithmetic, Imgaug_artistic, Imgaug_blur, Imgaug_color, Imgaug_contrast, Imgaug_convolutional, Imgaug_edges, Imgaug_segmentation, Imgaug_weather]
+    val_only_transforms_1:
+      - name: to_tensor
+      - name: normalize
+        mean: [0.485, 0.456, 0.406]
+        std: [0.229, 0.224, 0.225]
