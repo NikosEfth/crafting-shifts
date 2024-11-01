@@ -141,7 +141,7 @@ python aggregate_results.py --dataset PACS --backbone vit_small --seeds 0 1 2  -
 python aggregate_results.py --dataset PACS --backbone vit_small --seeds 0 1 2  --main_exp_name original_and_canny_training
 python aggregate_results.py --dataset PACS --backbone vit_small --seeds 0 1 2  --main_exp_name original-only_training 
 ```
-To produce the VS-test and VA-test scatter plots for all experiment-backbone combination (as in Figure 4 of the paper), run:
+As a final step, to produce the V<sub>S</sub>-test and V<sub>A</sub>-test scatter plots for all experiment-backbone combination (as in Figure 4 of the paper), run:
 ```
 python make_scatter_plots.py --dataset PACS
 ```
