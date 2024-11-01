@@ -9,7 +9,20 @@
 This repository contains the PyTorch implementation of our WACV 2025 paper: **"Crafting Distribution Shifts for Validation and Training in Single Source Domain Generalization".** [[ArXiv](https://www.arxiv.org/abs/2409.19774)]
 
 <div align="center">
-  <img width="100%" alt="WeiCom" src="images/domains.png">
+  <img width="80%" alt="WeiCom" src="images/domains.png">
+</div>
+
+## Overview
+### Motivation
+Single-source domain generalization attempts to learn a model on a source domain and deploy it to unseen target domains. Limiting access only to source domain data imposes two key challenges – how to train a model that can generalize and how to verify that it does. The standard practice of validation on the training distribution does not accurately reflect the model’s generalization ability, while validation on the test distribution is a malpractice to avoid. In this work, we follow a fundamental direction in the generalization task, i.e., data augmentations, to synthesize new distributions, but in contrast to the standard practive we apply them to the validation set instead, to estimate the method’s performance on multiple distribution shifts.
+
+### Approach
+Since these augmentations are also valuable in the training phase, we propose a k-fold cross-validation scheme performed across augmentation types to get the best of both worlds. This way, the training set is augmented with challenging examples while, at the same time, the validation provides an unbiased estimate of performance on unseen distributions. 
+
+Besides the novel validation method for SSDG, we propose a family of classification methods parametrized by several train and test-time hyper-parameters. The values of these parameters are selected by the proposed validation method. We focus on enforcing shape bias, whose effectiveness is demonstrated in prior work. We accomplish this by using a specialized image transformation technique, employing enhanced edge maps that eliminate textures while retaining crucial shape information. The transformation is performed both during training and testing.
+
+<div align="center">
+  <img width="100%" alt="WeiCom" src="images/teaser.png">
 </div>
 
 ## Environment
@@ -79,9 +92,6 @@ crafting-shifts/
 
 ## Running Experiments
 ### Recognition Method
-<div align="center">
-  <img width="100%" alt="WeiCom" src="images/teaser.png">
-</div>
 
 For a quick experiment on a single model, specify a high-performing learning rate (e.g., 0.00154) and choose from CaffeNet, ResNet18, or ViT-Small as the backbone. Results are printed and saved in the Results folder.
 ```
