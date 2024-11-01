@@ -8,6 +8,10 @@
 
 This repository contains the PyTorch implementation of our WACV 2025 paper: **"Crafting Distribution Shifts for Validation and Training in Single Source Domain Generalization".** [[ArXiv](https://www.arxiv.org/abs/2409.19774)]
 
+<div align="center">
+  <img width="100%" alt="WeiCom" src="images/domains.png">
+</div>
+
 ## Environment
 Our experiments were conducted using **python 3.10**. To set up the environment, run:
 ```
