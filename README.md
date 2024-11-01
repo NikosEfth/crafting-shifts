@@ -75,6 +75,10 @@ crafting-shifts/
 
 ## Running Experiments
 ### Recognition Method
+<div align="center">
+  <img width="100%" alt="WeiCom" src="images/teaser.png">
+</div>
+
 For a quick experiment on a single model, specify a high-performing learning rate (e.g., 0.00154) and choose from CaffeNet, ResNet18, or ViT-Small as the backbone. Results are printed and saved in the Results folder.
 ```
 python method.py --run experiments/yaml_PACS_imgaug_canny-all.yaml --train_only photo --seed 0 --method_loss 1 --lr 0.00154 --epochs 300 --backbone caffenet --dataset PACS --gpu 0
