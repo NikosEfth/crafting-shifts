@@ -147,5 +147,5 @@ python make_scatter_plots.py --dataset PACS
 ```
 The scatter plots will be saved in the `Results` folder. The following scatter plots for V<sub>S</sub> (top) and V<sub>A</sub> (bottom) are calculated for three different variations of the augmented PACS, that is three different executions of the `create_imgaug_datasets.py`. The proposed validation is robust to both the augmentation and training randomness.  
 <div align="center">
-  <img width="90%" alt="Scatter" src="images/scatter.png">
+  <img width="100%" alt="Scatter" src="images/scatter.png">
 </div>
