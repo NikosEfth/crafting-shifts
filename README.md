@@ -9,7 +9,7 @@
 This repository contains the PyTorch implementation of our WACV 2025 paper: **"Crafting Distribution Shifts for Validation and Training in Single Source Domain Generalization".** [[ArXiv](https://www.arxiv.org/abs/2409.19774)]
 
 <div align="center">
-  <img width="80%" alt="WeiCom" src="images/domains.png">
+  <img width="80%" alt="Domains" src="images/domains.png">
 </div>
 
 ## Overview
@@ -22,7 +22,7 @@ Since these augmentations are also valuable in the training phase, we propose a 
 Besides the novel validation method for SSDG, we propose a family of classification methods parametrized by several train and test-time hyper-parameters. The values of these parameters are selected by the proposed validation method. We focus on enforcing shape bias, whose effectiveness is demonstrated in prior work. We accomplish this by using a specialized image transformation technique, employing enhanced edge maps that eliminate textures while retaining crucial shape information. The transformation is performed both during training and testing.
 
 <div align="center">
-  <img width="100%" alt="WeiCom" src="images/teaser.png">
+  <img width="100%" alt="Teaser" src="images/teaser.png">
 </div>
 
 ## Environment
@@ -145,4 +145,7 @@ As a final step, to produce the V<sub>S</sub>-test and V<sub>A</sub>-test scatte
 ```
 python make_scatter_plots.py --dataset PACS
 ```
-The scatter plots will be saved in the `Results` folder.
+The scatter plots will be saved in the `Results` folder. The following scatter plots for V<sub>S</sub> (top) and V<sub>A</sub> (bottom) are calculated for three different variations of the augmented PACS, that is three different executions of the `create_imgaug_datasets.py`. The proposed validation is robust to both the augmentation and training randomness.  
+<div align="center">
+  <img width="90%" alt="Scatter" src="images/scatter.png">
+</div>
