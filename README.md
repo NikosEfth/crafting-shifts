@@ -14,12 +14,12 @@ This repository contains the PyTorch implementation of our WACV 2025 paper: **"C
 
 ## Overview
 ### Motivation
-Single-source domain generalization attempts to learn a model on a source domain and deploy it to unseen target domains. Limiting access only to source domain data imposes two key challenges – how to train a model that can generalize and how to verify that it does. The standard practice of validation on the training distribution does not accurately reflect the model’s generalization ability, while validation on the test distribution is a malpractice to avoid. In this work, we follow a fundamental direction in the generalization task, i.e., data augmentations, to synthesize new distributions, but in contrast to the standard practive we apply them to the validation set instead, to estimate the method’s performance on multiple distribution shifts.
+Single-source domain generalization attempts to learn a model on a source domain and deploy it to unseen target domains. Limiting access only to source domain data imposes two key challenges – how to train a model that can generalize and how to verify that it does. The standard practice of validation on the training distribution does not accurately reflect the model’s generalization ability, while validation on the test distribution is a malpractice to avoid. In this work, we follow a fundamental direction in the generalization task, i.e., data augmentations, to synthesize new distributions, but in contrast to the standard practice, we apply them to the validation set instead, to estimate the method’s performance on multiple distribution shifts.
 
 ### Approach
 Since these augmentations are also valuable in the training phase, we propose a k-fold cross-validation scheme performed across augmentation types to get the best of both worlds. This way, the training set is augmented with challenging examples while, at the same time, the validation provides an unbiased estimate of performance on unseen distributions. 
 
-Besides the novel validation method for SSDG, we propose a family of classification methods parametrized by several train and test-time hyper-parameters. The values of these parameters are selected by the proposed validation method. We focus on enforcing shape bias, whose effectiveness is demonstrated in prior work. We accomplish this by using a specialized image transformation technique, employing enhanced edge maps that eliminate textures while retaining crucial shape information. The transformation is performed both during training and testing.
+Besides the novel validation method for SSDG, we propose a family of classification methods parametrized by several train and test-time hyper-parameters. The values of these parameters are selected by the proposed validation method. We focus on enforcing shape bias, which is effectively demonstrated in prior work. We accomplish this by using a specialized image transformation technique, employing enhanced edge maps that eliminate textures while retaining crucial shape information. The transformation is performed both during training and testing.
 
 <div align="center">
   <img width="100%" alt="Teaser" src="images/teaser.png">
@@ -52,11 +52,11 @@ crafting-shifts/
     │           ├── photo/
     │           └── sketch/
 ```
-To generate the augmented PACS datasets with different augmentation categories, run:
+To generate the augmented PACS datasets with different special augmentation categories, run:
 ```
 python create_imgaug_datasets.py --dataset PACS
 ```
-This will create ten copies of PACS, each with a different augmentation category. The final data directory structure should look like this:
+This will create ten copies of PACS, each with a different special augmentation category. The final data directory structure should look like this:
 ```
 crafting-shifts/
     ├── data/
@@ -93,7 +93,7 @@ crafting-shifts/
 ## Running Experiments
 ### Recognition Method
 
-For a quick experiment on a single model, specify a high-performing learning rate (e.g., 0.00154) and choose from CaffeNet, ResNet18, or ViT-Small as the backbone. Results are printed and saved in the Results folder.
+For a quick experiment on a single model, specify a high-performing learning rate (e.g., 0.00154) and choose from **CaffeNet**, **ResNet18**, or **ViT-Small** as the backbone. Results are printed and saved in the `Results/experiment_name` folder.
 ```
 python method.py --run experiments/yaml_PACS_imgaug_canny-all.yaml --train_only photo --seed 0 --method_loss 1 --lr 0.00154 --epochs 300 --backbone caffenet --dataset PACS --gpu 0
 ```
@@ -104,48 +104,52 @@ python method.py --run experiments/yaml_PACS_imgaug_canny-all.yaml --train_only 
 python method.py --run experiments/yaml_PACS_imgaug_canny-all.yaml --train_only photo --seed 0 --method_loss 1 --lr 0.00154 --epochs 300 --backbone vit_small --dataset PACS --gpu 0
 ```
 ### Validation Method
-For the full set of experiments, including 5 experiment types, 3 backbones, 33 learning rates, and multiple seeds:
+The `method.py` script automatically performs a grid search for `--lr` (learning rate) and `--method_loss` (method loss weight) if they aren’t specified. To evaluate the validation method’s effectiveness, we recommend running the 5 configurations provided in this section that correspond to 3 experiments. For them, we suggest a learning rate search of 33 learning rates, using 3 backbones with 5 seeds each for **CaffeNet** and **ResNet18**, and 3 seeds for **ViT-Small**:
 
-1. Run the following commands for each backbone. Adjust GPU allocation as needed; ResNet18 and CaffeNet take ~1 day on a Tesla A100, while ViT-Small takes ~3.5 days.
+Run the following commands for the **ResNet18** backbone. Adjust GPU allocation and number of seeds as needed. The main experiment of the paper involves three configurations:
+
+- **`yaml_PACS_imgaug_canny-all.yaml`**: Uses all special augmentation categories during training.
+- **`yaml_PACS_imgaug_canny-first.yaml`** and **`yaml_PACS_imgaug_canny-second.yaml`**: Use only the first and second fold of the special augmentations, respectively. This is to select the best learning rate for the **`yaml_PACS_imgaug_canny-all.yaml`** experiment.
+
 ```
 # experiment name, number of seeds, backbone, gpu id
 bash run_k_experiments.sh yaml_PACS_imgaug_canny-all.yaml 5 resnet18 0
-bash run_k_experiments.sh yaml_PACS_imgaug_canny-first.yaml 5 resnet18 0
-bash run_k_experiments.sh yaml_PACS_imgaug_canny-second.yaml 5 resnet18 0
-bash run_k_experiments.sh yaml_PACS_original_canny.yaml 5 resnet18 0
-bash run_k_experiments.sh yaml_PACS_original.yaml 5 resnet18 0
-
-bash run_k_experiments.sh yaml_PACS_imgaug_canny-all.yaml 5 caffenet 0
-bash run_k_experiments.sh yaml_PACS_imgaug_canny-first.yaml 5 caffenet 0
-bash run_k_experiments.sh yaml_PACS_imgaug_canny-second.yaml 5 caffenet 0
-bash run_k_experiments.sh yaml_PACS_original_canny.yaml 5 caffenet 0
-bash run_k_experiments.sh yaml_PACS_original.yaml 5 caffenet 0
-
-bash run_k_experiments.sh yaml_PACS_imgaug_canny-all.yaml 3 vit_small 0
-bash run_k_experiments.sh yaml_PACS_imgaug_canny-first.yaml 3 vit_small 0
-bash run_k_experiments.sh yaml_PACS_imgaug_canny-second.yaml 3 vit_small 0
-bash run_k_experiments.sh yaml_PACS_original_canny.yaml 3 vit_small 0
-bash run_k_experiments.sh yaml_PACS_original.yaml 3 vit_small 0
+bash run_k_experiments.sh yaml_PACS_imgaug_canny-first.yaml 5 resnet18 1
+bash run_k_experiments.sh yaml_PACS_imgaug_canny-second.yaml 5 resnet18 2
 ```
-2. After completing the experiments, aggregate the results using the following commands. This will create `Total_results.csv` in each experiment folder, summarizing the model performance according to each validation method.
+In order to evaluate the proposed validation method for model selection you need more training:
+1. Some sub-optimal configurations:
+- **`yaml_PACS_original_canny.yaml`**: Uses no special augmentations.
+- **`yaml_PACS_original.yaml`**: Is vanilla training.
+```
+bash run_k_experiments.sh yaml_PACS_original_canny.yaml 5 resnet18 0
+bash run_k_experiments.sh yaml_PACS_original.yaml 5 resnet18 1
+```
+2. Different backbones:
+For **CaffeNet** and **ViT-Small** backbones, replace `resnet18` with `caffenet` or `vit_small` for all the experiments above, like so:
+```
+# Replace 'resnet18' with 'caffenet' or 'vit_small' as needed
+bash run_k_experiments.sh yaml_PACS_imgaug_canny-all.yaml 5 caffenet 0
+bash run_k_experiments.sh yaml_PACS_imgaug_canny-all.yaml 3 vit_small 1
+```
+**ResNet18** and **CaffeNet** take ~1 day on a Tesla A100, while **ViT-Small** takes ~3.5 days.
+
+After completing the experiments, aggregate the results using the following commands. This will create `Total_results.csv` in each of the experiment folders specified by `--main_exp_name`. This csv is summarizing the model performance according to each validation method. For experiments that need cross-validation, the extra training configurations are specified by `--cv_exp_names`.
 ```
 python aggregate_results.py --dataset PACS --backbone resnet18 --seeds 0 1 2 3 4 --main_exp_name imgaug_and_canny_training_all --cv_exp_names imgaug_and_canny_training_first imgaug_and_canny_training_second
 python aggregate_results.py --dataset PACS --backbone resnet18 --seeds 0 1 2 3 4 --main_exp_name original_and_canny_training
 python aggregate_results.py --dataset PACS --backbone resnet18 --seeds 0 1 2 3 4 --main_exp_name original-only_training
-
-python aggregate_results.py --dataset PACS --backbone caffenet --seeds 0 1 2 3 4 --main_exp_name imgaug_and_canny_training_all --cv_exp_names imgaug_and_canny_training_first imgaug_and_canny_training_second
-python aggregate_results.py --dataset PACS --backbone caffenet --seeds 0 1 2 3 4 --main_exp_name original_and_canny_training
-python aggregate_results.py --dataset PACS --backbone caffenet --seeds 0 1 2 3 4 --main_exp_name original-only_training 
-
-python aggregate_results.py --dataset PACS --backbone vit_small --seeds 0 1 2  --main_exp_name imgaug_and_canny_training_all --cv_exp_names imgaug_and_canny_training_first imgaug_and_canny_training_second
-python aggregate_results.py --dataset PACS --backbone vit_small --seeds 0 1 2  --main_exp_name original_and_canny_training
-python aggregate_results.py --dataset PACS --backbone vit_small --seeds 0 1 2  --main_exp_name original-only_training 
 ```
-As a final step, to produce the V<sub>S</sub>-test and V<sub>A</sub>-test scatter plots for all experiment-backbone combination (as in Figure 4 of the paper), run:
+Aggregate the results for all the experiments you run by changing the `--backbone`, and `--seeds` accordingly. For example, if only 3 seeds were used for a `vit_small` experiment, change the aggregation specifications like so:
+```
+python aggregate_results.py --dataset PACS --backbone vit_small --seeds 0 1 2  --main_exp_name imgaug_and_canny_training_all --cv_exp_names imgaug_and_canny_training_first imgaug_and_canny_training_second
+```
+
+As a final step, to produce the V<sub>S</sub>-test and V<sub>A</sub>-test scatter plots for all experiment-backbone combinations for a given dataset (as in Figure 4 of the paper), run:
 ```
 python make_scatter_plots.py --dataset PACS
 ```
-The scatter plots will be saved in the `Results` folder. The following scatter plots for V<sub>S</sub> (top) and V<sub>A</sub> (bottom) are calculated for three different variations of the augmented PACS, that is three different executions of the `create_imgaug_datasets.py`. The proposed validation is robust to both the augmentation and training randomness.  
+The scatter plots will be saved in the `Results` folder. The following scatter plots for V<sub>S</sub> (top) and V<sub>A</sub> (bottom) are calculated for three different variations of the augmented PACS, that is three different executions of the `create_imgaug_datasets.py`. This shows that the proposed validation is robust to the augmentation randomness.
 <div align="center">
   <img width="100%" alt="Scatter" src="images/scatter.png">
 </div>
