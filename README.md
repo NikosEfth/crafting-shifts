@@ -41,7 +41,7 @@ crafting-shifts/
     │   └── alexnet_caffe.pth.tar
 ```
 ## Dataset
-Download the **PACS dataset** and place it in the directory data/PACS/PACS_Original:
+Download the **PACS dataset** and place it in the directory `data/PACS/PACS_Original`:
 ```
 crafting-shifts/
     ├── data/
