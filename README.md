@@ -93,16 +93,17 @@ crafting-shifts/
 ## Running Experiments
 ### Recognition Method
 
-For a quick experiment on a single model, specify a high-performing learning rate (e.g., 0.00154) and choose from **CaffeNet**, **ResNet18**, or **ViT-Small** as the backbone. Results are printed and saved in the `Results/experiment_name` folder.
+For a quick experiment on a single model, specify a high-performing learning rate and choose from **CaffeNet**, **ResNet18**, or **ViT-Small** as the backbone. Results are printed and saved in the `Results/experiment_name` folder.
 ```
-python method.py --run experiments/yaml_PACS_imgaug_canny-all.yaml --train_only photo --seed 0 --method_loss 1 --lr 0.00154 --epochs 300 --backbone caffenet --dataset PACS --gpu 0
-```
-```
-python method.py --run experiments/yaml_PACS_imgaug_canny-all.yaml --train_only photo --seed 0 --method_loss 1 --lr 0.00154 --epochs 300 --backbone resnet18 --dataset PACS --gpu 0
+python method.py --run experiments/yaml_PACS_imgaug_canny-all.yaml --backbone caffenet --train_only photo --seed 0 --method_loss 1 --lr 0.00154 --epochs 300 --dataset PACS --gpu 0
 ```
 ```
-python method.py --run experiments/yaml_PACS_imgaug_canny-all.yaml --train_only photo --seed 0 --method_loss 1 --lr 0.00154 --epochs 300 --backbone vit_small --dataset PACS --gpu 0
+python method.py --run experiments/yaml_PACS_imgaug_canny-all.yaml --backbone resnet18 --train_only photo --seed 0 --method_loss 1 --lr 0.00154 --epochs 300 --dataset PACS --gpu 0
 ```
+```
+python method.py --run experiments/yaml_PACS_imgaug_canny-all.yaml --backbone vit_small --train_only photo --seed 0 --method_loss 1 --lr 0.00154 --epochs 300 --dataset PACS --gpu 0
+```
+**Note:** The learning rate 0.00154 happens to work great for all three architectures.
 ### Validation Method
 The `method.py` script automatically performs a grid search for `--lr` (learning rate) and `--method_loss` (method loss weight) if they aren’t specified. To evaluate the validation method’s effectiveness, we recommend running the 5 configurations provided in this section that correspond to 3 experiments. For them, we suggest a learning rate search of 33 learning rates, using 3 backbones with 5 seeds each for **CaffeNet** and **ResNet18**, and 3 seeds for **ViT-Small**:
 
@@ -134,7 +135,7 @@ bash run_k_experiments.sh yaml_PACS_imgaug_canny-all.yaml 3 vit_small 1
 ```
 **ResNet18** and **CaffeNet** take ~1 day on a Tesla A100, while **ViT-Small** takes ~3.5 days.
 
-Note: If the times above are overwhelming, feel free to reduce the number of learning rates in the search from 33 to a smaller number, i.e., 10, by editing the `run_k_experiments.sh` file and adding `--lr_search_no 10` to the python run. This will reduce the time to one-third.
+**Note:** If the times above are overwhelming, feel free to reduce the number of learning rates in the search from 33 to a smaller number, i.e., 10, by editing the `run_k_experiments.sh` file and adding `--lr_search_no 10` to the python run. This will reduce the time to one-third.
 
 After completing the experiments, aggregate the results using the following commands. This will create `Total_results.csv` in each of the experiment folders specified by `--main_exp_name`. This csv is summarizing the model performance according to each validation method. For experiments that need cross-validation, the extra training configurations are specified by `--cv_exp_names`.
 ```
