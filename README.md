@@ -134,6 +134,8 @@ bash run_k_experiments.sh yaml_PACS_imgaug_canny-all.yaml 3 vit_small 1
 ```
 **ResNet18** and **CaffeNet** take ~1 day on a Tesla A100, while **ViT-Small** takes ~3.5 days.
 
+Note: If the times above are overwhelming, feel free to reduce the number of learning rates in the search from 33 to a smaller number, i.e., 10, by editing the `run_k_experiments.sh` file and adding `--lr_search_no 10` to the python run. This will reduce the time to one-third.
+
 After completing the experiments, aggregate the results using the following commands. This will create `Total_results.csv` in each of the experiment folders specified by `--main_exp_name`. This csv is summarizing the model performance according to each validation method. For experiments that need cross-validation, the extra training configurations are specified by `--cv_exp_names`.
 ```
 python aggregate_results.py --dataset PACS --backbone resnet18 --seeds 0 1 2 3 4 --main_exp_name imgaug_and_canny_training_all --cv_exp_names imgaug_and_canny_training_first imgaug_and_canny_training_second
