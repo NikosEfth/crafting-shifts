@@ -6,7 +6,7 @@
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/crafting-distribution-shifts-for-validation/image-to-sketch-recognition-on-pacs)](https://paperswithcode.com/sota/image-to-sketch-recognition-on-pacs?p=crafting-distribution-shifts-for-validation)
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/crafting-distribution-shifts-for-validation/image-to-sketch-recognition-on-minidomainnet)](https://paperswithcode.com/sota/image-to-sketch-recognition-on-minidomainnet?p=crafting-distribution-shifts-for-validation)
 
-This repository contains the PyTorch implementation of our WACV 2025 paper: **"Crafting Distribution Shifts for Validation and Training in Single Source Domain Generalization".** [[ArXiv](https://www.arxiv.org/abs/2409.19774)]
+This repository contains the PyTorch implementation of our WACV 2025 Oral paper: **"Crafting Distribution Shifts for Validation and Training in Single Source Domain Generalization".** [[ArXiv](https://www.arxiv.org/abs/2409.19774)]
 
 <div align="center">
   <img width="80%" alt="Domains" src="images/domains.png">
