@@ -161,11 +161,10 @@ The scatter plots will be saved in the `Results` folder. The following scatter p
 If you find this repository useful, please consider giving a star 🌟 and citation:
 
 ```latex
-@inproceedings{efth2025crafting,
+@inproceedings{crafting2025,
   title={Crafting Distribution Shifts for Validation and Training in Single Source Domain Generalization},
   author={Efthymiadis, Nikos and Tolias, Giorgos and Chum, Ondřej},
   booktitle={IEEE Winter Conference on Applications of Computer Vision},
-  year={2025},
-  organization={IEEE}
+  year={2025}
 }
 ```
